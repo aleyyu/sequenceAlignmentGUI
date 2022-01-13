@@ -4,14 +4,6 @@
 #fig = plt.figure()
 from collections import Counter
 
-"""
-seq1 = 'ATCGTACGATGCATGACTACAGT'
-seq2 = 'ATGGACCAGATATTGGGAGAGCCGGGTAGGACA'
-ksize = 3
-
-#GGGAGAGCCAGGTAGGACA
-"""
-
 sequence = ""
 ksize = 0
 
@@ -28,6 +20,15 @@ def build_kmers(sequence, ksize):
 
     return kmers
 
+
+def kmer_freq_top(sequence, ksize):
+    kmers = build_kmers(sequence, ksize)
+    mostcommon = Counter(kmers).most_common(5)
+
+    for i in mostcommon:
+        print("---------")
+        print(i)
+    return mostcommon
 
 def reverse_freq(freq_list):
     bolu_freq = []
@@ -90,18 +91,3 @@ def kmer_graph_3(sequence, ksize):
 
     return kmer_no, freq
 
-def kmer_freq_top(sequence, ksize):
-    kmers = build_kmers(sequence, ksize)
-    mostcommon = Counter(kmers).most_common(5)
-
-    kmer_string = []
-    freq = []
-
-    #print("Most Common Kmers: ", *mostcommon, sep="\n")
-
-    for a, b in mostcommon:
-        kmer_string.append(a)
-        freq.append(b)
-
-    #return kmer_string, freq
-    return mostcommon

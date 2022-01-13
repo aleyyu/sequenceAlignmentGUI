@@ -244,7 +244,14 @@ class Ui_MainWindow(object):
         self.txt_align_output.setSizePolicy(sizePolicy)
         self.txt_align_output.setStyleSheet("background-image: url(:/backgrounds/back2.jpg);")
         self.txt_align_output.setObjectName("txt_align_output")
-        self.txt_align_output.setFont(QFont('MS Shell Dlg 2', 18))
+        font = QtGui.QFont()
+        font.setFamily("Garamond")
+        font.setPointSize(15)
+        font.setBold(True)
+        self.txt_align_output.setFont(font)
+        #font.setWeight(75)
+        #self.txt_align_output.setFont(QFont('Garamond', 15))
+        #self.txt_align_output.setBold(True)
         self.lyt_otpt_alignment.addWidget(self.txt_align_output, 0, 0, 1, 1)
 
         self.lyt_sol.addLayout(self.lyt_otpt_alignment)
@@ -407,6 +414,7 @@ class Ui_MainWindow(object):
     def btn_alignment(self):
         t = self.txt
         p = self.ptrn
+        count = 0
 
         if self.f_name_txt == "":
             QMessageBox.about(MainWindow, "ERROR", "No FATSA file for text sequence selected. Please select one.")
@@ -418,9 +426,14 @@ class Ui_MainWindow(object):
         else:
             output = fm_index_algorithm.align(t, p)
 
+            self.txt_align_output.setText("The start position of pattern sequence is: ")
+
             for i in output:
                 # self.textBrowser_3.append("i: {}".format(i))
-                self.txt_align_output.append("i = {}. index'de bulundu.".format(i))
+                self.txt_align_output.append("- {}".format(i))
+                count += 1
+
+            self.txt_align_output.append("\n {} start position found".format(count))
 
         # runtime = fm_index_algorithm.run_time()
         # self.txt_align_output.setText(runtime)
@@ -434,6 +447,8 @@ class Ui_MainWindow(object):
         dialog.setNameFilter("FNA files (*.fna)")
         dialog.setFilter(QDir.Files)
 
+        str_fname = ""
+
         if dialog.exec_():
             file_name = dialog.selectedFiles()
             self.f_name_txt = file_name
@@ -446,11 +461,11 @@ class Ui_MainWindow(object):
             else:
                 pass
 
+        str_fname = str_fname.join(file_name)
+
         if file_name:
-            #fname = Path(file_name)
-            #openFileNameLabel->setText(QFileInfo(fileName).fileName());
-            #self.lbl_txt.setText(QFileInfo(file_name).fileName())
-            self.lbl_txt.setText("{}".format(file_name))
+            fname = Path(str_fname)
+            self.lbl_txt.setText("Selected file: {}".format(fname.name))
         else:
             self.lbl_txt.setText("No file is chosen. Please choose a file.")
 
@@ -461,6 +476,8 @@ class Ui_MainWindow(object):
         dialog.setWindowTitle("Choose FATSA file for pattern sequence.")
         dialog.setNameFilter("FNA files (*.fna)")
         dialog.setFilter(QDir.Files)
+
+        str_fname = ""
 
         if dialog.exec_():
             file_name = dialog.selectedFiles()
@@ -474,8 +491,11 @@ class Ui_MainWindow(object):
             else:
                 pass
 
+        str_fname = str_fname.join(file_name)
+
         if file_name:
-            self.lbl_ptrn.setText("{}".format(file_name))
+            fname = Path(str_fname)
+            self.lbl_ptrn.setText("Selected file: {}".format(fname.name))
         else:
             self.lbl_ptrn.setText("No file was choosed. Please choose a file.")
 
@@ -520,18 +540,21 @@ class Ui_MainWindow(object):
         ksize = int(get_k)
         self.k = ksize
 
-        mostcommon = kmer_algorithm.kmer_freq_top(sequence, ksize)
+        mc = kmer_algorithm.kmer_freq_top(sequence, ksize)
+        """
         kmer_string = []
         kmer_freq = []
         kmer = {}
+
         for a, b in mostcommon:
             kmer_string.append(a)
             kmer_freq.append(b)
             kmer[a] = b
-
-        for kmer, freq in kmer.items():
-            txt = "kmer: {} - freq: {}".format(kmer, freq)
-            self.txt_kmer_top.append(txt)
+        """
+        #for i in mc:
+            #print(i)
+            #txt = "kmer: {} - freq: {}".format(kmer, freq)
+            #self.txt_kmer_top.append("{}".format(txt))
 
     def draw_graph_1(self):
         sequence = self.ptrn
@@ -596,7 +619,7 @@ class Ui_MainWindow(object):
         styles = {'color': 'r', 'font-size': '15px'}
         self.graph_3.setLabel('left', 'freq', **styles)
         self.graph_3.setLabel('bottom', 'kmer no', **styles)
-        self.graph_3.setTitle("Top 5 Frequence of K-Mer Graph", color="g", size="10pt")
+        self.graph_3.setTitle("Top 5 Frequence Graph", color="g", size="10pt")
         self.graph_3.plot(x,y)
         self.graph_3.addItem(bargraph)
 
