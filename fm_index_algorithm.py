@@ -179,7 +179,7 @@ def string_search(ptrn_sequence, firstCol, bwtString, saArray, countTable, occTa
     return list(set(hitSApositions))
 
 def align(txt_sequence, ptrn_sequence):
-
+    start_prog = run_time_start()
 
     saArray = sa_array(txt_sequence)
     bwtArray = bwt_table_construction(txt_sequence)
@@ -191,14 +191,16 @@ def align(txt_sequence, ptrn_sequence):
     result = string_search(ptrn_sequence, firstCol, bwtString, saArray, countTable, occTable)
     #print("Your exact alignment is located at: {}".format(result))
 
-    return result
+    stop_prog = run_time_stop()
+    run_time = stop_prog - start_prog
+
+    return result, run_time
 
 """
 def run_time():
-    start_prog = run_time_start()
+    
     align(txt_sequence, ptrn_sequence)
-    stop_prog = run_time_stop()
-    run_time = stop_prog - start_prog
+    
     return run_time
 """
 

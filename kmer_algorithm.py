@@ -25,9 +25,6 @@ def kmer_freq_top(sequence, ksize):
     kmers = build_kmers(sequence, ksize)
     mostcommon = Counter(kmers).most_common(5)
 
-    for i in mostcommon:
-        print("---------")
-        print(i)
     return mostcommon
 
 def reverse_freq(freq_list):

@@ -276,6 +276,7 @@ class Ui_MainWindow(object):
         self.label.setFont(font)
         self.label.setObjectName("label")
         self.lyt_otpt_kmer.addWidget(self.label)
+
         self.txt_kmer_freq = QtWidgets.QTextBrowser(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -284,7 +285,11 @@ class Ui_MainWindow(object):
         self.txt_kmer_freq.setSizePolicy(sizePolicy)
         self.txt_kmer_freq.setStyleSheet("background-image: url(:/backgrounds/back1.jpg);")
         self.txt_kmer_freq.setObjectName("txt_kmer_freq")
+        self.txt_kmer_freq.verticalScrollBar().setDisabled(False)
+        self.txt_kmer_freq.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
         self.lyt_otpt_kmer.addWidget(self.txt_kmer_freq)
+
+
         self.lyt_output_kmer.addLayout(self.lyt_otpt_kmer)
         self.lyt_kmer_top = QtWidgets.QVBoxLayout()
         self.lyt_kmer_top.setObjectName("lyt_kmer_top")
@@ -415,6 +420,8 @@ class Ui_MainWindow(object):
         t = self.txt
         p = self.ptrn
         count = 0
+        output = []
+        run_time = 0.0
 
         if self.f_name_txt == "":
             QMessageBox.about(MainWindow, "ERROR", "No FATSA file for text sequence selected. Please select one.")
@@ -424,7 +431,10 @@ class Ui_MainWindow(object):
             QMessageBox.about(MainWindow, "ERROR", "No FATSA file for pattern sequence selected. Please select one.")
             QMessageBox.show()
         else:
-            output = fm_index_algorithm.align(t, p)
+            result = fm_index_algorithm.align(t, p)
+            output = result[0]
+            run_time = result[1]
+            #print(result)
 
             self.txt_align_output.setText("The start position of pattern sequence is: ")
 
@@ -433,7 +443,10 @@ class Ui_MainWindow(object):
                 self.txt_align_output.append("- {}".format(i))
                 count += 1
 
+            self.txt_align_output.append("\n-----------------------------------------------------------------------------------------------")
             self.txt_align_output.append("\n {} start position found".format(count))
+            self.txt_align_output.append("\n-----------------------------------------------------------------------------------------------")
+            self.txt_align_output.append("\n Run time is: {}".format(run_time))
 
         # runtime = fm_index_algorithm.run_time()
         # self.txt_align_output.setText(runtime)
@@ -442,7 +455,7 @@ class Ui_MainWindow(object):
         # self.textBrowser_3.setPlainText(output)
 
     def load_txt(self):
-        dialog = QFileDialog()
+        dialog = QFileDialog(directory = "D:\Masaüstü\FATSA files")
         dialog.setWindowTitle("Choose FATSA file for text sequence.")
         dialog.setNameFilter("FNA files (*.fna)")
         dialog.setFilter(QDir.Files)
@@ -472,7 +485,7 @@ class Ui_MainWindow(object):
             return text
 
     def load_ptrn(self):
-        dialog = QFileDialog()
+        dialog = QFileDialog(directory = "D:\Masaüstü\FATSA files")
         dialog.setWindowTitle("Choose FATSA file for pattern sequence.")
         dialog.setNameFilter("FNA files (*.fna)")
         dialog.setFilter(QDir.Files)
@@ -531,7 +544,8 @@ class Ui_MainWindow(object):
         for kmer, freq in kmers.items():
             txt = "kmer: {} - freq: {}".format(kmer, freq)
             self.txt_kmer_freq.append(txt)
-
+        verScrollBar = self.txt_kmer_freq.setVerticalScrollBar()
+        verScrollBar.setValue(verScrollBar.minimum())
 
     def kmer_freq_top(self):
 
@@ -551,10 +565,9 @@ class Ui_MainWindow(object):
             kmer_freq.append(b)
             kmer[a] = b
         """
-        #for i in mc:
-            #print(i)
-            #txt = "kmer: {} - freq: {}".format(kmer, freq)
-            #self.txt_kmer_top.append("{}".format(txt))
+        for kmer, freq in mc:
+            txt = "kmer: {} - freq: {}".format(kmer, freq)
+            self.txt_kmer_top.append("{}".format(txt))
 
     def draw_graph_1(self):
         sequence = self.ptrn
@@ -566,7 +579,6 @@ class Ui_MainWindow(object):
         y = []
 
         sonuc = kmer_algorithm.kmer_graph_1(sequence, ksize)
-        #sonuc = kmer_algorithm.kmer_graph_1(sequence, ksize)
         x = sonuc[0]
         y = sonuc[1]
 
