@@ -285,8 +285,6 @@ class Ui_MainWindow(object):
         self.txt_kmer_freq.setSizePolicy(sizePolicy)
         self.txt_kmer_freq.setStyleSheet("background-image: url(:/backgrounds/back1.jpg);")
         self.txt_kmer_freq.setObjectName("txt_kmer_freq")
-        self.txt_kmer_freq.verticalScrollBar().setDisabled(False)
-        self.txt_kmer_freq.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
         self.lyt_otpt_kmer.addWidget(self.txt_kmer_freq)
 
 
@@ -377,9 +375,9 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Sequence Alignment GUI"))
-        self.label_6.setText(_translate("MainWindow", "Select FATSA File for Text Sequence"))
+        self.label_6.setText(_translate("MainWindow", "Select FASTA File for Text Sequence"))
         self.btn_upload_txt.setText(_translate("MainWindow", "UPLOAD FILE"))
-        self.label_7.setText(_translate("MainWindow", "Select FATSA File for Pattern Sequence"))
+        self.label_7.setText(_translate("MainWindow", "Select FASTA File for Pattern Sequence"))
         self.btn_upload_ptrn.setText(_translate("MainWindow", "UPLOAD FILE"))
         self.btn_search.setWhatsThis(_translate("MainWindow", "<html><head/><body><p><br/></p></body></html>"))
         self.btn_search.setText(_translate("MainWindow", "SEARCH WITH FM-INDEX"))
@@ -396,15 +394,6 @@ class Ui_MainWindow(object):
     f_name_txt = ""
     f_name_ptrn = ""
 
-
-    """
-    def show_alignment(self):
-        print(self.sonuc)
-        goster = self.sonuc
-        #self.textBrowser_3.setPlainText(self.sonuc)
-        for i in goster:
-            self.textBrowser_3.append(i)
-    """
 
     def clear(self):
         self.txt_align_output.clear()
@@ -424,11 +413,11 @@ class Ui_MainWindow(object):
         run_time = 0.0
 
         if self.f_name_txt == "":
-            QMessageBox.about(MainWindow, "ERROR", "No FATSA file for text sequence selected. Please select one.")
+            QMessageBox.about(MainWindow, "ERROR", "No FASTA file for text sequence selected. Please select one.")
             QMessageBox.show()
 
         elif self.f_name_ptrn == "":
-            QMessageBox.about(MainWindow, "ERROR", "No FATSA file for pattern sequence selected. Please select one.")
+            QMessageBox.about(MainWindow, "ERROR", "No FASTA file for pattern sequence selected. Please select one.")
             QMessageBox.show()
         else:
             result = fm_index_algorithm.align(t, p)
@@ -455,8 +444,8 @@ class Ui_MainWindow(object):
         # self.textBrowser_3.setPlainText(output)
 
     def load_txt(self):
-        dialog = QFileDialog(directory = "D:\Masaüstü\FATSA files")
-        dialog.setWindowTitle("Choose FATSA file for text sequence.")
+        dialog = QFileDialog(directory = "D:\Masaüstü\FASTA files")
+        dialog.setWindowTitle("Choose FASTA file for text sequence.")
         dialog.setNameFilter("FNA files (*.fna)")
         dialog.setFilter(QDir.Files)
 
@@ -485,8 +474,8 @@ class Ui_MainWindow(object):
             return text
 
     def load_ptrn(self):
-        dialog = QFileDialog(directory = "D:\Masaüstü\FATSA files")
-        dialog.setWindowTitle("Choose FATSA file for pattern sequence.")
+        dialog = QFileDialog(directory = "D:\Masaüstü\FASTA files")
+        dialog.setWindowTitle("Choose FASTA file for pattern sequence.")
         dialog.setNameFilter("FNA files (*.fna)")
         dialog.setFilter(QDir.Files)
 
@@ -520,7 +509,7 @@ class Ui_MainWindow(object):
         get_k = self.input_k_value.text()
 
         if self.f_name_ptrn == "":
-            QMessageBox.about(MainWindow, "ERROR", "No FATSA file for pattern sequence selected. Please select one.")
+            QMessageBox.about(MainWindow, "ERROR", "No FASTA file for pattern sequence selected. Please select one.")
             QMessageBox.show()
 
         elif get_k == "":
@@ -544,8 +533,8 @@ class Ui_MainWindow(object):
         for kmer, freq in kmers.items():
             txt = "kmer: {} - freq: {}".format(kmer, freq)
             self.txt_kmer_freq.append(txt)
-        verScrollBar = self.txt_kmer_freq.setVerticalScrollBar()
-        verScrollBar.setValue(verScrollBar.minimum())
+        #verScrollBar = self.txt_kmer_freq.setVerticalScrollBar()
+        #verScrollBar.setValue(verScrollBar.minimum())
 
     def kmer_freq_top(self):
 

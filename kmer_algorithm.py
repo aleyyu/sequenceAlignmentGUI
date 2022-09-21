@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-#import matplotlib.pylab as plt
-#fig = plt.figure()
 from collections import Counter
 
 sequence = ""

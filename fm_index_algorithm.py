@@ -1,15 +1,6 @@
 import timeit
 EOS = "$"
 
-
-"""
-text_sequence = open("gene.txt","r",encoding="utf-8")
-txt_sequence = text_sequence.read()
-
-pattern_sequence = open("pattern.txt", "r", encoding="utf-8")
-ptrn_sequence = pattern_sequence.read()
-"""
-
 txt_sequence = ""
 ptrn_sequence = ""
 
@@ -37,7 +28,6 @@ def bwt_string(array):
         output_string += i[-1]
     return output_string
 
-#bunu anlamadım
 def sa_array(x):
     saDic = {}
     saArray = []
@@ -58,6 +48,13 @@ def bwt_table_construction_equation(x, suffixArray):
     # bwtStringbwtString[i]
     return ''.join(bwtString)
 
+def first_col(saArray, txt_sequence):
+    x = ""
+    txt_sequence = txt_sequence + EOS
+    #print("sa array: {}".format(saArray))
+    for i in saArray:
+        x = x + str(txt_sequence[i])
+    return x
 
 saArray = sa_array(txt_sequence)
 #print("Suffix Array: {}".format(str(saArray)))
@@ -89,7 +86,6 @@ def count_table(bwtString):
     #print("count table: {}".format(countTable))
     bwtStringLetterCounts = len(bwtString)
 
-    #bunu anlamadım
     for letter in alphbetRev:
         #print("before: " + str(countTable[letter]))
         countTable[letter] = bwtStringLetterCounts - countTable[letter]
@@ -124,13 +120,6 @@ occTable = occ_table(bwtString)
 #print("occtable:")
 #print_dictionary(occTable)
 
-def first_col(saArray, txt_sequence):
-    x = ""
-    txt_sequence = txt_sequence + EOS
-    #print("sa array: {}".format(saArray))
-    for i in saArray:
-        x = x + str(txt_sequence[i])
-    return x
 
 firstCol = first_col(saArray, txt_sequence)
 #print("first column: {}".format(firstCol))
@@ -165,14 +154,10 @@ def string_search(ptrn_sequence, firstCol, bwtString, saArray, countTable, occTa
         i = 2
         while i <= ptrn_length:
             letter = ptrn_sequence.pop()
-            # print letter
-            # print [startOld,endOld]
             startOld = letter_LF(letter, startOld, bwtString, saArray, countTable, occTable)
             endOld = letter_LF(letter, endOld, bwtString, saArray, countTable, occTable)
             i += 1
-        # print [startOld,endOld]
         hitSApositions = [startOld, endOld]
-        # return hitSApositions
         for i in range(len(hitSApositions)):
             hitSApositions[i] = saArray[hitSApositions[i]]
 
